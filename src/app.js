@@ -4,6 +4,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const hbs = require("hbs");
 
+const port = process.env.PORT || 3000;
+
 const publicDirectoryPath = path.join(__dirname, "../public");
 const viewsPath = path.join(__dirname, "../views"); // Views folder where templates are stored
 
@@ -683,6 +685,6 @@ app.post("/view-salary", (req, res) => {
 });
 
 // Start the server
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
+app.listen(port, () => {
+  console.log("Server is running on port " + port);
 });
