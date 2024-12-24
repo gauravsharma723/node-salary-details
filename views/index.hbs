@@ -1,0 +1,167 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salary Details</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" />
+  <!-- Custom CSS (optional) -->
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+
+<body>
+  <div class="container my-4">
+    <!-- Header Section -->
+    <header class="text-center mb-4">
+      <h1>Employee Salary Details</h1>
+    </header>
+
+    <!-- Filter Section -->
+    <section class="card p-4 shadow-sm mb-4">
+      <!-- Form to select employee, month, and year -->
+      <form action="/view-salary" method="POST" class="mt-4">
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="employee">Employee Name</label>
+            <select name="employee" id="employee" class="form-control select2">
+              {{#each employees}}
+              <option value="{{Emp_id}}" {{#ifEquals Emp_id ../employeeID}}selected{{/ifEquals}}>{{EmpName}}
+
+                ({{designationName}})</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="month">Month</label>
+            <select name="month" id="month" class="form-control select2">
+              {{!-- <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option> --}}
+              <option value="11">November</option>
+              {{!-- <option value="12">December</option> --}}
+            </select>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="year">Year</label>
+            <select name="year" id="year" class="form-control">
+              <option value="2024">2024</option>
+              {{!-- <option value="2023">2023</option> --}}
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">View Salary</button>
+      </form>
+    </section>
+
+    <!-- Salary Details Section -->
+    {{#if data}}
+    <section class="card p-4 shadow-sm">
+      <h2 class="mb-4">Salary Details for
+        <span id="selected-employee"> {{selectedEmployee}}</span>
+        -
+        <span id="selected-month"> {{selectedMonth}}</span>
+        {{selectedYear}}
+      </h2>
+
+      <table class="table table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Description</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody id="salary-table">
+          <!-- Dynamically populated salary details -->
+          <tr>
+            <td><strong>Basic Salary</strong></td>
+            <td><strong>₹{{basic}}</strong></td>
+          </tr>
+          <tr>
+            <td>HRA</td>
+            <td>₹{{hra}}</td>
+          </tr>
+          <tr>
+            <td>Earn Gross</td>
+            <td>₹{{earnGross}}</td>
+          </tr>
+          <tr>
+            <td>Allowance</td>
+            <td>₹{{allowance}}</td>
+          </tr>
+          <tr>
+            <td>Total Earn Gross</td>
+            <td>₹{{totalEarnGross}}</td>
+          </tr>
+          <tr>
+            <td>EPF</td>
+            <td>₹{{epf}}</td>
+          </tr>
+          <tr>
+            <td>PF</td>
+            <td>₹{{pf}}</td>
+          </tr>
+          <tr>
+            <td><strong>Total CTC</strong></td>
+            <td><strong>₹{{totalCTC}}</strong></td>
+          </tr>
+          <tr>
+            <td><strong class="text-danger">Total Deductions</strong></td>
+            <td><strong class="text-danger">₹{{totalDeduction}}</strong></td>
+          </tr>
+          <tr class="bg-success text-white">
+            <td><strong>Net Pay</strong></td>
+            <td><strong>₹{{netPay}}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    {{/if}}
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      // Initialize select2 after the DOM is fully loaded
+      $('.select2').select2({
+        theme: 'bootstrap'
+      });
+    });
+
+    const employeeID = {{ employeeID }};  // Handlebars variable injected into the script
+
+    const selectOptions = document.getElementById("employee");
+
+    for (let option of selectOptions.options) {
+      if (option.value == employeeID) {
+        $(selectOptions).val(employeeID).trigger('change.select2');
+        break;
+      }
+    }
+  </script>
+
+
+</body>
+
+</html>
